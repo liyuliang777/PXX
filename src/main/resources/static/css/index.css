@@ -1,0 +1,53 @@
+
+body .container-fluid{margin: 0px;padding: 0px;border: none;}
+#logo{background-image: url("../images/logoBack.jpg");background-size: 100%;background-repeat: no-repeat;}
+.hover:hover{text-decoration: none;color: orange}
+a:hover{text-decoration: none;color: orange}
+/* .head{padding: 20px 30px;margin-top: 20px;} */
+
+.head,.footer{background-color: #F8F8F8;color: white;margin: 0px;padding: 0px 50px;}
+/* .head a{color: white;} */
+/* .head a:hover{color: orange;} */
+
+.padding{padding:20px 50px;}
+.padding-top{padding: 10px 0px}
+
+#mnue{-moz-opacity:0.6;opacity: 0.6;position: absolute;z-index: 999;background-color: #0A164C;width: 200px;height:600px;margin: 0px;padding: 0px;}
+.mnue{line-height: 90px;font-size: 20px;}
+.mnue a{color: white;}
+.mnue a span{color:white;}
+.mnue:hover{background-color: #FF6700;}
+.mnue a:hover{color: white;}
+
+.footer a{color: white;}
+
+.grey{background-color: #F8F8F8;}
+.white{background-color:white;color: #1897DA;}
+.whiteBlack{background-color:white;color: black;}
+.blue{background-color: #3ECCF2;color: white;}
+.size{height:200px;padding: 20px 0px 20px 20px}
+.title{font-size: 30px;font-weight: bold}
+.des{font-size: 20px;margin: 10px 0px 40px 0px;}
+.jiange{margin: 10px 0px;}
+.pro:hover{box-shadow:0px 0px 10px 10px gray;transition: all 0.5s}
+.reservation{margin-top: 30px}
+.showType{height: 100px;border: none;background: none}
+
+hr{margin: 0px;padding: 0px;}
+.per{background-color: #F8F8F8;height: 700px;padding: 20px 20px;}
+.show{height: 600px;}
+.fontsize{font-size: 20px;}
+.displaynone{display: none;}
+a span{color: #337AB7;}
+
+li{margin: 0px;}
+/* li:hover{background-color: #0A164C;} */
+/* li:hover{background-color: #EEEEEE;} */
+.user{color: orangered;}
+.fontcolor{color: white;}
+.head-font-color{color: #747474;}
+
+
+.success{color: green;}
+.fail{color: red;}
+/* .glyphicon:hover{color: white;} */

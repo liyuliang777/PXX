@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <!-- namespace:必须是对应接口的全路径 -->
+	<mapper namespace="org.hut.dao.OrderMapper">
+		<resultMap type="orderTable" id="orderAndProduct">
+			<id property="id" column="ID"/>
+			<result property="ordNum" column="ORD_NUM"/>
+			<result property="ordCustomerId" column="ORD_CUSTOMERID"/>
+			<result property="ordBookingQuota" column="ORD_BOOKINGQUOTA"/>
+			<result property="ordSfCheckType" column="ORD_SFCHECKTYPE"/>
+			<result property="ordCwCheckType" column="ORD_CWCHECKTYPE"/>
+			<result property="ordType" column="ORD_TYPE"/>
+			<result property="ordDate" column="ORD_DATE"/>
+			<result property="ordSfCheckPeople" column="ORD_SFCHECKPEOPLE"/>
+			<result property="ordCwCheckPeople" column="ORD_CWCHECKPEOPLE"/>
+			<result property="ordContractId" column="ORD_CONTRACTID"/>
+			<result property="ordQypzId" column="ORD_QYPZID"/>
+			<association property="ordCusCard" column="ORD_CUSCARDID" javaType="BankAccount">
+				<result property="bankNum" column="BANK_NUM"/>
+			</association>
+			<association property="proApply" column="ORD_PRODUCTID" javaType="Apply" >
+				<result property="proName" column="pro_name"/>
+				<result property="proReceipts" column="PRO_RECEIPTS"/>
+				<result property="proDateline" column="PRO_DATELINE"/>
+				<result property="proScale" column="PRO_SCALE"/>
+			</association> 
+		</resultMap>
+		
+		<!-- 分页查询订单信息 -->
+		<select id="selectOrderTableByPageBean" parameterType="org.hut.util.PageBean" resultMap="orderAndProduct">
+			select *from 
+				(select n.*,rownum r from
+			(select o.ID,ORD_NUM,ORD_CUSTOMERID,ORD_BOOKINGQUOTA,ORD_SFCHECKTYPE,
+			ORD_CWCHECKTYPE,ORD_TYPE,ORD_DATE,ORD_SFCHECKPEOPLE,
+			ORD_CWCHECKPEOPLE,pro_name,PRO_RECEIPTS,PRO_DATELINE,
+			ORD_CONTRACTID,ORD_QYPZID,ORD_PRODUCTID,BANK_NUM
+			from ORDERTABLE o INNER JOIN PRO_APPLY p ON o.ORD_PRODUCTID=p.PRO_ID 
+			INNER JOIN BANK_ACCOUNT b ON b.id=o.ORD_CUSCARDID
+				<where>
+					<if test="query !=null">
+						<if test="query.qcustomerId !=null and query.qcustomerId !=0 ">
+							and  ORD_CUSTOMERID =#{query.qcustomerId}
+						</if>
+						<if test="query.productName !=null and query.productName !=''">
+							and pro_Name like concat('%',concat(#{query.productName},'%'))
+						</if>
+						<if test="query.qproReceipts !=null and query.qproReceipts !=0">
+							and PRO_RECEIPTS =#{query.qproReceipts}
+						</if>
+						<if test="query.startordDate !=null">
+							and ORD_DATE >#{query.startordDate}
+						</if>
+						<if test="query.endordDate !=null">
+							and ORD_DATE <![CDATA[<]]>#{query.endordDate}
+						</if>
+						<if test="query.startordBookingQuota !=null and query.startordBookingQuota !=0">
+							and ORD_BOOKINGQUOTA >#{query.startordBookingQuota}
+						</if>
+						<if test="query.endordBookingQuota !=null and query.endordBookingQuota !=0">
+							and ORD_BOOKINGQUOTA <![CDATA[<]]>#{query.endordBookingQuota}
+						</if>
+					</if>
+				</where>  
+			)n) where r>#{startPageSize} and r<![CDATA[<=]]>#{endPageSize}
+		</select>
+		<!-- 查询订单总记录数 -->
+		<select id="selectOrderCount" parameterType="org.hut.util.Query" resultType="int">
+			select count(*) from (
+				select o.ID,ORD_NUM,ORD_CUSTOMERID,ORD_BOOKINGQUOTA,ORD_SFCHECKTYPE,
+			ORD_CWCHECKTYPE,ORD_TYPE,ORD_DATE,ORD_SFCHECKPEOPLE,
+			ORD_CWCHECKPEOPLE,pro_name,PRO_RECEIPTS,PRO_DATELINE,
+			ORD_CONTRACTID,ORD_QYPZID,ORD_PRODUCTID,BANK_NUM
+			from ORDERTABLE o INNER JOIN PRO_APPLY p ON o.ORD_PRODUCTID=p.PRO_ID
+			INNER JOIN BANK_ACCOUNT b ON b.id=o.ORD_CUSCARDID)
+			<where>
+						<if test="qcustomerId !=null and qcustomerId !=0">
+							and  ORD_CUSTOMERID =#{qcustomerId}
+						</if>
+						<if test="productName !=null and productName !=''">
+							and pro_Name like concat('%',concat(#{productName},'%'))
+						</if>
+						<if test="qproReceipts !=null and qproReceipts !=0">
+							and PRO_RECEIPTS =#{qproReceipts}
+						</if>
+						<if test="startordDate !=null">
+							and ORD_DATE >#{startordDate}
+						</if>
+						<if test="endordDate !=null">
+							and ORD_DATE <![CDATA[<]]>#{endordDate}
+						</if>
+						<if test="startordBookingQuota !=null and startordBookingQuota !=0">
+							and ORD_BOOKINGQUOTA >#{startordBookingQuota}
+						</if>
+						<if test="endordBookingQuota !=null and endordBookingQuota !=0">
+							and ORD_BOOKINGQUOTA <![CDATA[<]]>#{endordBookingQuota}
+						</if>
+			</where>
+		</select>
+		<!-- 修改订单状态 -->
+		<update id="upDataOrderTableById" parameterType="orderTable" >
+			update ORDERTABLE set ORD_TYPE=#{ordType}  where id=#{id}
+		</update>
+		<!-- 根据id查询订单信息 -->
+		<select id="selectOrderById" parameterType="int" resultMap="orderAndProduct">
+			select o.ID,ORD_NUM,ORD_CUSTOMERID,ORD_BOOKINGQUOTA,ORD_SFCHECKTYPE,ORD_CWCHECKTYPE,ORD_TYPE,ORD_DATE,
+				ORD_SFCHECKPEOPLE,ORD_CWCHECKPEOPLE,pro_name,PRO_RECEIPTS,PRO_DATELINE,PRO_SCALE,
+				ORD_CONTRACTID,ORD_QYPZID,ORD_CUSCARDID,ORD_PRODUCTID ,BANK_NUM
+				from ORDERTABLE o INNER JOIN PRO_APPLY p ON o.ORD_PRODUCTID=p.PRO_ID 
+				INNER JOIN BANK_ACCOUNT b ON b.id=o.ORD_CUSCARDID where o.id=#{id}
+		</select>
+		<!--预约订单 --> 
+		<insert id="addOrderTable" parameterType="orderTable" >
+			insert into ORDERTABLE (ID,ORD_NUM,ORD_CUSTOMERID,ORD_BOOKINGQUOTA,ORD_SFCHECKTYPE,ORD_CWCHECKTYPE,ORD_TYPE,ORD_DATE,
+				ORD_CONTRACTID,ORD_QYPZID,ORD_CUSCARDID,ORD_PRODUCTID)
+				values (seq_order.nextval,#{ordNum},#{ordCustomerId},#{ordBookingQuota},#{ordSfCheckType},#{ordCwCheckType} ,#{ordType},SYSDATE,#{ordContractId},#{ordQypzId},#{ordCusCard.id},#{proApply.proId})
+<!-- 				values (seq_order.nextval,#{ordNum},2,200, '待审核' ,'待审核' ,'预约中',SYSDATE,#{ordContractId},#{ordQypzId},2,1) -->
+		</insert>
+	</mapper>

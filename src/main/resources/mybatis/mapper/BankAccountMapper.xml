@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hut.dao.BankAccountMapper">
+
+<resultMap type="bankAccount" id="bankMapper">
+<id column="id"  property="id"/>
+<result column="bank_num" property="bankNum"/>
+<result column="bank_name" property="bankName"/>
+<result column="owner_name" property="ownerName"/>
+<result column="pro_id" property="proId"/>
+<result column="customer_id" property="customerId"/>
+</resultMap>
+<select id="queryCardById" parameterType="int" resultMap="bankMapper">
+	select * from bank_account where customer_id=#{id}
+</select>
+
+<delete id="deleteCard" parameterType="int">
+	delete from bank_account where id=#{id}
+</delete>
+
+<insert id="insertCard" parameterType="bankaccount">
+	insert into bank_account (id,bank_num,bank_name,owner_name,customer_id) values(card_seq.nextval,#{bankNum},#{bankName},#{ownerName},#{customerId})
+</insert>
+
+<update id="updateCard" parameterType="bankaccount">
+	update bank_account set bank_num=#{bankNum},bank_name=#{bankName} where id=#{id}
+</update>
+
+
+</mapper>

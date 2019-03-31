@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hut.dao.CustomerMapper">
+	
+	<resultMap type="customer" id="customer_account">
+		<id column="id" property="id"/>
+		<result column="cus_id" property="cusId"/>
+		<result column="cus_name" property="cusName"/>
+		<result column="cus_pwd" property="cusPwd"/>
+		<result column="cus_mobilephone" property="cusMobilePhone"/>
+		<result column="cus_phone" property="cusPhone"/>
+		<result column="cus_sex" property="cusSex"/>
+		<result column="cus_birth" property="cusBirth"/>
+		<result column="cus_haddr" property="cusHAddr"/>
+		<result column="cus_addr" property="cusAddr"/>
+		<result column="cus_workspace" property="cusWorkspace"/>
+		<result column="cus_education" property="cusEducation"/>
+		<result column="cus_yearinput" property="cusYearInput"/>
+		<result column="cus_beforeloginip" property="cusBeforeLoginIp"/>
+		<result column="cus_beforelogindate" property="cusBeforeLoginDate"/>
+		<result column="cus_registerdate" property="cusRegisterDate"/>
+		<result column="cus_type" property="cusType"/>
+		<result column="cus_email" property="cusEmail"/>
+		<result column="cus_loginnum" property="cusLoginNum"/>
+		<result column="cus_risktolerancelevel" property="cusRiskToleranceLevel"/>
+		<result column="cus_totalmoney" property="cusTotalMoney"/>
+		<result column="cus_card_Id" property="cusCardId"/>
+		<collection column="id" property="bankAccounts" ofType="bankAccount" select="org.hut.dao.BankAccountMapper.queryCardById"/>
+	</resultMap>
+	
+	<sql id="base_customer">
+		id,cus_id,cus_name,cus_pwd,cus_mobilephone,
+		cus_phone,cus_sex,cus_birth,cus_haddr,cus_addr,
+		cus_workspace,cus_education,cus_yearinput,cus_beforeloginip,
+		cus_beforelogindate,cus_registerdate,cus_type,cus_email,
+		cus_loginnum,cus_risktolerancelevel,cus_totalmoney,cus_card_id
+	</sql>
+	
+	<!-- 查询客户信息 -->
+	<select id="selectCustomer" parameterType="customer" resultMap="customer_account">
+		select 
+		<include refid="base_customer"/>
+		from customer where cus_mobilephone = #{cusMobilePhone} and cus_pwd = #{cusPwd}
+	</select>
+	
+	<!-- 根据id查询数据 -->
+	<select id="selectCustomerById" parameterType="int" resultMap="customer_account">
+		select 
+		<include refid="base_customer"/>
+		from customer where id = #{id}
+	</select>
+	
+	<!-- 查询手机号码 -->
+	<select id="selectCusMobilePhone" parameterType="string" resultType="string">
+		select cus_mobilephone from customer where cus_mobilePhone = #{cusMobilePhone}
+	</select>
+	
+	
+	<!-- 插入数据 -->
+	<insert id="insertCustomer" parameterType="customer" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		INSERT INTO CUSTOMER("ID", "CUS_ID", 
+							"CUS_NAME","CUS_PWD", "CUS_MOBILEPHONE", 
+							"CUS_PHONE", "CUS_SEX","CUS_BIRTH", 
+							"CUS_HADDR", "CUS_ADDR", "CUS_WORKSPACE", 
+							"CUS_EDUCATION", "CUS_YEARINPUT", "CUS_BEFORELOGINIP", 
+							"CUS_BEFORELOGINDATE","CUS_REGISTERDATE", "CUS_TYPE", 
+							"CUS_EMAIL", "CUS_LOGINNUM", "CUS_RISKTOLERANCELEVEL", 
+							"CUS_TOTALMONEY", "CUS_CARD_ID") 
+							
+					VALUES (seq_customer_id.nextval, seq_customer_cus_id.nextval, 
+							#{cusName}, #{cusPwd}, #{cusMobilePhone}, 
+							#{cusPhone}, #{cusSex}, #{cusBirth}, 
+							#{cusHAddr}, #{cusAddr}, #{cusWorkspace},
+							#{cusEducation}, #{cusYearInput}, #{cusBeforeLoginIp}, 
+							#{cusBeforeLoginDate}, #{cusRegisterDate}, #{cusType},
+							#{cusEmail}, #{cusLoginNum}, #{cusRiskToleranceLevel},
+							#{cusTotalMoney}, #{cusCardId})
+							
+	</insert>
+	
+	
+	<!-- 更新客户数据 -->
+	<update id="updateCustomer" parameterType="customer">
+		update CUSTOMER
+	    <set >
+		      <if test="cusId != null" >
+		        CUS_ID = #{cusId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="cusName != null" >
+		        CUS_NAME = #{cusName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusPwd != null" >
+		        CUS_PWD = #{cusPwd,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusMobilePhone != null" >
+		        CUS_MOBILEPHONE = #{cusMobilePhone,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusPhone != null" >
+		        CUS_PHONE = #{cusPhone,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusSex != null" >
+		        CUS_SEX = #{cusSex,jdbcType=CHAR},
+		      </if>
+		      <if test="cusBirth != null" >
+		        CUS_BIRTH = #{cusBirth,jdbcType=DATE},
+		      </if>
+		      <if test="cusHAddr != null" >
+		        CUS_HADDR = #{cusHAddr,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusAddr != null" >
+		        CUS_ADDR = #{cusAddr,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusWorkspace != null" >
+		        CUS_WORKSPACE = #{cusWorkspace,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusEducation != null" >
+		        CUS_EDUCATION = #{cusEducation,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusYearInput != null" >
+		        CUS_YEARINPUT = #{cusYearInput,jdbcType=DECIMAL},
+		      </if>
+		      <if test="cusBeforeLoginIp != null" >
+		        CUS_BEFORELOGINIP = #{cusBeforeLoginIp,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusBeforeLoginDate != null" >
+		        CUS_BEFORELOGINDATE = #{cusBeforeLoginDate},
+		      </if>
+		      <if test="cusRegisterDate != null" >
+		        CUS_REGISTERDATE = #{cusRegisterDate},
+		      </if>
+		      <if test="cusType != null" >
+		        CUS_TYPE = #{cusType,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusEmail != null" >
+		        CUS_EMAIL = #{cusEmail,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusLoginNum != null" >
+		        CUS_LOGINNUM = #{cusLoginNum,jdbcType=DECIMAL},
+		      </if>
+		      <if test="cusRiskToleranceLevel != null" >
+		        CUS_RISKTOLERANCELEVEL = #{cusRiskToleranceLevel,jdbcType=VARCHAR},
+		      </if>
+		      <if test="cusTotalMoney != null" >
+		        CUS_TOTALMONEY = #{cusTotalMoney,jdbcType=DECIMAL},
+		      </if>
+		      <if test="cusCardId != null" >
+		        CUS_CARD_ID = #{cusCardId,jdbcType=VARCHAR},
+		      </if>
+	    </set>
+	    	where ID = #{id,jdbcType=DECIMAL}
+	</update>
+	
+	
+</mapper>

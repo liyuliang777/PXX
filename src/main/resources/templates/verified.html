@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>实名认证</title>
+    <link rel="shortcut icon" href="images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/verify.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/verify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <script src="js/base.js"></script>
+    <style>
+        .first{width: 0%;}
+        .second{width: 50%;}
+        .over{width: 100%;}
+        img{border-radius: 20px;width: 100%;}
+        img:hover{box-shadow:0px 0px 10px 5px gray;transition: all 0.5s}
+        .infoClass{height: 30px;}
+        .error{color: red;}
+        .success{color: green;}
+    </style>
+</head>
+<body>
+    <div id="verifiedDiv" class="container">
+        <div class="row">
+            <h2 style="margin-left: 30px;">个人信息完善</h2>
+        </div>
+        <hr>
+        <div class="row text-center" style="padding: 20px;" v-text="info">
+
+        </div>
+        <div class="progress">
+            <div class="progress-bar bg-success" :class="schedule"></div>
+        </div>
+        <p style="margin: 40px 0px;"></p>
+        <div class="row">
+            <div class="col-md-7">
+                <router-view></router-view>
+            </div>
+            <div class="col-md-5 text-center">
+                <img src="images/2.jpg" alt="">
+            </div>
+        </div>
+    </div>
+
+        <!-- 第一个页面，实名认证组件 -->
+        <template id="first">
+            <div class="container">
+                <form action="#">
+                    <!-- 真实姓名 -->
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">真实姓名</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="realName" @blur="checkRealName" class="form-control" placeholder="请输入真实姓名">
+                        </div>
+                        <div class="col-md-3" v-text="realNameInfo" :class="realNameClass"></div>
+                    </div>
+                    <!-- 身份证号码 -->
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">身份证号码</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="idCard" @blur="checkIdCard"  class="form-control" placeholder="请输入居民身份证号码">
+                        </div>
+                        <div class="col-md-3" v-text="idCardInfo" :class="idCardClass"></div>
+                    </div>
+                    <hr>
+                    <!-- 是否提交验证 -->
+                    <div class="row">
+                        <div class="col-md-9 text-right">
+                            <button type="reset" class="btn btn-warning">重填</button>
+                            <button type="button" class="btn btn-success" @click="toSecond">下一步</button>
+                            <!-- <router-link type="button" class="btn btn-success" to="/second/2">下一步</router-link> -->
+                        </div>
+                        <div class="col-md-3" :class="checkAllClass" v-text="checkAllInfo"></div>
+                    </div>
+                </form>
+            </div>
+        </template>
+
+        <!-- 第二个页面，资料完善组件-->
+        <template id="second">
+            <div class="container">
+                <form action="#">
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">固定电话</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="cusPhone" @blur="checkCusPhone" class="form-control" placeholder="请输入固话  如：0818-8314906">
+                        </div>
+                        <div class="col-md-3" v-text="cusPhoneInfo" :class="cusPhoneClass"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">现住址</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="cusAddr" @blur="checkCusAddr" class="form-control" placeholder="请输入现住址">
+                        </div>
+                        <div class="col-md-3" v-text="cusAddrInfo" :class="cusAddrClass"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">工作</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="cusWorkspace" @blur="checkCusWorkspace" class="form-control" placeholder="请输入工作">
+                        </div>
+                        <div class="col-md-3" v-text="cusWorkspaceInfo" :class="cusWorkspaceClass"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">最高学历</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="cusEducation" @blur="checkCusEducation" class="form-control" placeholder="请输入最高学历">
+                        </div>
+                        <div class="col-md-3" v-text="cusEducationInfo" :class="cusEducationClass"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">年收入</label>
+                        <div class="col-md-6 form-group">
+                            <input type="text" v-model="cusYearInput" @blur="checkCusYearInput" class="form-control" placeholder="请输入年收入，阿拉伯数字">
+                        </div>
+                        <div class="col-md-3" v-text="cusYearInputInfo" :class="cusYearInputClass"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-3 text-right">邮箱</label>
+                        <div class="col-md-6 form-group">
+                            <input type="email" v-model="cusEmail" @blur="checkEmail" class="form-control" placeholder="请输入邮箱">
+                        </div>
+                        <div class="col-md-3" v-text="cusEmailInfo" :class="cusEmailClass"></div>
+                    </div>
+                    
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-9 text-right">
+                            <button type="reset" class="btn btn-warning">重填</button>
+                            <button type="button" class="btn btn-success" @click="toOver">下一步</button>
+                            <!-- <router-link type="button" class="btn btn-success" to="/over">下一步</router-link> -->
+                            <div class="col-md-3" v-text="checkAllInfo" :class="checkAllClass"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </template>
+
+        <!-- 第三个页面，成功组件 -->
+        <template id="over">
+            <div class="container">
+                <div class="col-md-8 text-center" style="margin: 80px 20%;font-size: 30px;">
+                    实名认证及资料完善成功！点击完成重新登录
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-9 text-right">
+                        <a href="/removeCustomer" class="btn btn-success" target="_parent">完成</a>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    <script src="js/verified.js"></script>
+</body>
+</html>

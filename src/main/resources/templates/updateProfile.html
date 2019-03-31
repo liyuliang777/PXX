@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/vue.js"></script>
+
+</head>
+<body>
+	<form action="" method="post" >
+	<input type="hidden" id=id th:value="${cus.id}">
+	<input type="text" id="cusId" th:value="${cus.cusId}"><br/>
+	姓名：<input type="text" id="cusName" th:value="${cus.cusName}" readonly="readonly"></br>
+	手机号：<input type="text" id="cusMobilePhone" th:value="${cus.cusMobilePhone}" th:onblur="checkPhone()" ><label id="s1"></label> <br/>
+	证件号：<input type="text" id="cusCardId" th:value="${cus.cusCardId}" readonly="readonly"></br>
+	性别：<input type="radio" name="Sex" id="cusSex"  value="男" th:checked="${#strings.trim(cus.cusSex)=='男'}" />男
+		<input type="radio" name="Sex" id="cusSex"  value="女" th:checked="${#strings.trim(cus.cusSex)=='女'}" />女 </br>
+	生日：<input type="date" id="cusBirth" th:value="${#dates.format(cus.cusBirth, 'yyyy-MM-dd')}"></br>
+	户籍：<input type="text" id="cusHAddr" th:value="${cus.cusHAddr}"></br>
+	工作单位：<input type="text" id="cusWorkspace" th:value="${cus.cusWorkspace}"></br>
+	学历：<input type="text" id="cusEducation" th:value="${cus.cusEducation}"></br>
+	详细地址：<input type="text" id="cusAddr" th:value="${cus.cusAddr}"></br>
+	邮箱：<input type="email" id="cusEmail" th:value="${cus.cusEmail}" onblur="checkEmail()"><span id="s2"></span> </br>
+	固定电话：<input type="text" id="cusPhone" th:value="${cus.cusPhone}"></br>
+	<input type="button" value="修改" onclick="update()">
+</form>
+</body>
+<script type="text/javascript">
+
+	//验证手机号码
+function checkPhone(){
+		var tel=$("#cusMobilePhone").val();
+		 var reg=/^1[34578]\d{9}$/;     
+		  //检测输入内容是否匹配正则表达式
+		  if(reg.test(tel)==false){
+		    $("#s1").html("手机号码不合法");
+		    $("#s1").css("color","red");
+		    return false;
+		  }
+		  $("#s1").html("");
+		  return true;
+	}
+	
+//验证邮箱
+function checkEmail(){
+	var email=$("#cusEmail").val();
+	 var reg=/^\w+@\w+\.com|cn|net$/;      
+	  //检测输入内容是否匹配正则表达式
+	  if(email!=null&& email!=""){
+		  if(!reg.test(email)){
+			    $("#s2").html("邮箱不合法");
+			    $("#s2").css("color","red");
+			    return false;
+			  }else{
+				  $("#s2").html("");
+				  return true; 
+			  }
+			  
+	  }else{
+		  $("#s2").html("");
+		  return true;
+	  }
+	  
+	  
+}		
+	
+function update(){
+	if(checkPhone()&&checkEmail()){
+		$.ajax({
+			type:"post",
+			dataType:"json",
+			url:"updatecustomer",
+			data:{
+				"id":$("#id").val(),
+				"cusId":$("#cusId").val(),
+			 	"cusName":$("#cusName").val(),
+				"cusMobilePhone":$("#cusMobilePhone").val(),
+				"cusCardId":$("#cusCardId").val(),
+				"cusSex":$("#cusSex").val(),
+				"cusBirth":$("#cusBirth").val(),
+				"cusHAddr":$("#cusHAddr").val(),
+				"cusWorkspace":$("#cusWorkspace").val(),
+				"cusEducation":$("#cusEducation").val(),
+				"cusAddr":$("#cusAddr").val(),
+				"cusEmail":$("#cusEmail").val(),
+				"cusPhone":$("#cusPhone").val()
+				}
+		}).done(function(date){
+				if(date.flag){
+					alert('修改成功');
+					location.href='/getcus?status=0';
+				}else{
+					alert('修改失败，请重新填写');
+					location.href='/toupdatefile';
+				}
+			
+		})
+	}else{
+		alert('填写错误，请重新填写');
+	}
+	
+}
+</script>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace:必须是对应接口的全路径
+	
+ -->
+<mapper namespace="org.hut.dao.ProductTypeMapper">
+<resultMap type="productType" id="ptMap">
+<id property="dictId" column="dict_id"/>
+	<result  column="type_Code" property="typeCode"/>
+	<result  column="type_Name" property="typeName"/>
+	<result  column="item_Name" property="itemName"/>
+</resultMap>
+
+
+<select id="queryPyById"  parameterType="int"  resultMap="ptMap">
+	select * from base_dict where DICT_ID=#{id}
+</select>
+
+
+</mapper>

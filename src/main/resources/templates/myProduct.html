@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/vue.js"></script>
+    <script src="/js/my.js"></script>
+    <script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
+</head>
+<style>
+	  body{margin: 0px;padding: 0px}
+ 	  .top{padding-top: 20px;}
+	  .margin{margin: 20px 0px;} 
+	  th{
+	       text-align: center;
+	       }
+	  td{
+	       text-align: center;
+	       }
+	  hr{margin: 0px; padding: 0px;}
+	   </style>
+<body>
+	<div class="container top">
+    	<h2 class="glyphicon glyphicon-shopping-cart">我拥有的</h2>
+    </div>
+    <hr>
+    <div class="container top"> 
+    <form action="" method="post" id="myform">
+    	<div id="soso" class="row">
+    		<div class="col-md-6">
+    			<div class="row margin">
+    				<div class="col-md-5 text-right">产品名称</div>
+    				<div class="col-md-6"><input type="text" class="form-control " name="productName" v-model="productName" v-if/></div>
+    			</div>
+    			<div class="row margin">
+    				<div class="col-md-6 text-right">预期收益率</div>
+    				<div class="col-md-3">
+    					<select v-model="qproReceipts"  name="qproReceipts" style="height:30px;width:100px ">
+    						<option value="0">--请选择--</option>
+    						<option value="0.091">0.091</option>
+    						<option value="0.092">0.092</option>
+    						<option value="0.093">0.093</option>
+    						<option value="0.094">0.094</option>
+    						<option value="0.095">0.095</option>
+    						<option></option>
+    					</select>
+    				</div>
+    				<div class="col-md-3"><button  @click="queryByCondition" type="button"  class="btn btn-success">查询</button></div>
+    			</div> 
+    		</div>
+    		<div class="col-md-6">
+    			<div class="row margin">
+    				<div class="col-md-3 text-right">订单生成时间</div>
+    				<div class="col-md-4"><input v-model="startordDate" name="startordDate" type="date" class="form-control "/></div>
+    				<div class="col-md-1"><span style="font-weight:bold;font-size: 16px;">~</span></div>
+    				<div class="col-md-4"><input v-model="endordDate" name="endordDate" type="date" class="form-control"/></div>
+    			</div>
+    			<div class="row margin">
+    				<div class="col-md-3 text-right">投资金额</div>
+    				<div class="col-md-4"><input v-model="startordBookingQuota" name="startordBookingQuota" type="text" class="form-control" /></div>
+    				<div class="col-md-1"><span style="font-weight:bold;font-size: 16px;">~</span></div>
+					<div class="col-md-4"><input v-model="endordBookingQuota" name="endordBookingQuota" type="text" class="form-control "/></div>
+    			</div> 
+    		</div>
+    		</div>
+    	</form>
+    	</div>
+    	<script>
+    		var sosoVue = new Vue({
+    			el:'#soso',
+    			data:{
+    				productName:'',
+    				qproReceipts:'0',
+    				startordDate:'',
+    				endordDate:'',
+    				startordBookingQuota:'',
+    				endordBookingQuota:''
+    			 },
+    			methods:{
+    				queryByCondition(){
+    				//	alert(this.productName +"----"+ this.qproReceipts)
+    					pageVue.queryByPage(1);
+    				
+    				}
+    			}
+    		})
+    	</script>
+    <div id="orderDiv" class="container">
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>订单编号</th>
+                    <th>产品名称</th>
+                    <th>期限</th>
+                    <th>预期收益率</th>
+                    <th>银行卡号</th>
+                    <th>订单生成时间</th>
+                    <th>订单状态</th>
+                    <th>投资金额</th>
+                    <th>权益凭证编号</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(order, i) in orders" :key="i">
+                    <td v-text="order.ordNum"></td>
+                    <td v-text="order.proApply.proName"></td>
+                    <td v-text="order.proApply.proDateline"></td>
+                    <td v-text="order.proApply.proReceipts"></td>
+                    <td v-text="order.ordCusCard.bankNum"></td>
+                    <td v-text="dateFormat(order.ordDate)"></td>
+                    <td v-text="order.ordType"></td>
+                    <td v-text="order.ordBookingQuota"></td>
+                    <td v-text="order.ordQypzId"></td>
+                    <td v-if="order != null">
+                      	<div>
+	                      	<div v-if="order.ordType=='已预约'">
+		                        <a :href="'/getOrderTableById?id='+order.id" class="btn btn-info">查看详情</a>
+	                        </div>
+	                        <div v-else-if="order.ordType=='预约中'">
+	                        	<a :href="'/getOrderTableById?id='+order.id" class="btn btn-info">查看详情</a>
+		                        <a :href="'/updateOrderById?id='+order.id" class="btn btn-warning">取消预约</a>
+	<!-- 	                        <a href="#" class="btn btn-warning">取消预约</a> -->
+	                        </div>
+                  		</div>
+                    </td>
+                </tr>
+					<!-- <tr th:each="order:${pageBean.getList()}">
+						<td th:text="${order.ordNum}"></td>
+						<td th:text="${order.proApply.proName}"></td>
+						<td th:text="${order.proApply.proDateline}"></td> 
+	                    <td th:text="${order.proApply.proReceipts}"></td>
+	                    <td th:text="${order.ordCusCardId}"></td>
+	                    <td th:text="${#dates.format(order.ordDate, 'yyyy-MM-dd')}"></td>
+	                    <td th:text="${order.ordType}"></td>
+	                    <td th:text="${order.ordBookingQuota}"></td>
+	                    <td th:text="${order.ordQypzId}"></td>
+	                    <td th:if="order != null">
+	                        <a href="#" class="btn btn-info">查看详情</a>
+	                        <a href="/updateOrderById(id=#{order.id})" class="btn btn-warning">取消预约</a>
+	                    </td>
+					</tr>	 -->
+            </tbody>
+        </table>
+    </div>
+    <script>  
+        var orderVue = new Vue({
+             el:'#orderDiv',
+             data:{
+                 orders:[],
+            },
+             created() {
+               
+             },
+             methods:{
+            	 //时间格式的转换
+            	 dateFormat:function(time) {
+                     var date=new Date(time);
+                     var year=date.getFullYear();
+                     var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+                     var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+                     var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+                     var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+                     var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+                     return year+"/"+month+"/"+day;
+                 }
+            }
+         })
+    </script> 
+    <div id="page" class="container text-center jiange">
+        <div class="btn-group">
+            <button type="button" class="btn btn-group btn-default" :disabled="upPage" @click="queryByPage(1)">首页</button>
+            <button type="button" class="btn btn-group btn-default" :disabled="upPage" @click="queryByPage(currentPage-1)">上一页</button>
+            <button v-for="(page, i) in pages" :key="i" type="button" :class="currentPage==page?'active':''" @click="queryByPage(page)" class="btn btn-group btn-default" v-text="page"></button>
+            <button type="button" class="btn btn-group btn-default" :disabled="downPage" @click="queryByPage(currentPage+1)">下一页</button>
+            <button type="button" class="btn btn-group btn-default" :disabled="downPage" @click="queryByPage(totlePage)">末页</button>
+        </div>
+    </div>
+     <script>
+        var pageVue = new Vue({
+            el:'#page',
+            data:{
+                pages:[],
+                currentPage:1,
+                totlePage:6,
+                pageClass:'',
+                upPage:false,
+                downPage:false,
+            },
+           created() {
+               this.queryByPage(1);
+           },
+            methods: {
+                queryByPage:function(page){
+                	//属性值的定义
+                    var data = {
+                        page:page,
+                        productName:sosoVue.productName,
+                        qproReceipts:sosoVue.qproReceipts,
+                        startordDate:sosoVue.startordDate,
+                        endordDate:sosoVue.endordDate,
+                        startordBookingQuota:sosoVue.startordBookingQuota,
+                        endordBookingQuota:sosoVue.endordBookingQuota, 
+                    }
+                    orderVue.orders = getDataByAjax('/getAllOrder',data,this);
+                }
+            },
+        })
+    </script>   
+</body>
+</html>

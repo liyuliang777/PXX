@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace:必须是对应接口的全路径
+	
+ -->
+<mapper namespace="org.hut.dao.ApplyMapper">
+<resultMap type="apply" id="applyMap">
+<id property="proId" column="pro_Id"/>
+	<result  column="pro_no" property="proNo"/>
+	<result  column="pro_name" property="proName"/>
+	<result  column="pro_scale" property="proScale"/>
+	<result  column="pro_dateline" property="proDateline"/>
+	<result  column="pro_receipts" property="proReceipts"/>
+	<result  column="pro_dept" property="proDept"/>
+	<result  column="pro_invest" property="proInvest"/>
+	<result  column="pro_substate" property="proSubstate"/>
+	<result  column="pro_detail_id" property="proDetailId"/>
+	<association property="productType" column="PRO_TYPE_ID" javaType="productType" select="org.hut.dao.ProductTypeMapper.queryPyById"></association>
+
+</resultMap>
+
+<select id="queryAllApply" resultMap="applyMap">
+	select * from pro_apply 
+</select>
+<select id="queryApplayById"  parameterType="int"  resultMap="applyMap">
+	select * from pro_apply where PRO_DETAIL_ID=#{id}
+</select>
+
+
+</mapper>

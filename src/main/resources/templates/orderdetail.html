@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script src="js/fileinput.js"></script>
+		<link rel="stylesheet" href="css/fileinput.css" />
+			<style>
+	        body{margin: 0px;padding: 0px}
+	        .top{padding-top: 20px;}
+	        .margin{margin: 15px 20px;}
+	        hr{margin: 10px; padding: 0px;}
+	  </style>
+	</head>
+	<body>
+		<div class="container top">
+			<div  class="col-md-6 text-left glyphicon glyphicon-list-alt" style="font-size:40px; font-weight: bolder;">
+				<span>订单详情</span>
+			</div>	
+		</div>
+		<hr />
+		<a href="/myProduct" class="btn btn-info margin">返回订单列表</a>
+		<div class="container top">
+			<div class="row">
+				<div class="col-md-6 text-right">
+					<div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size:18px ;">订单编号:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="ordNum" th:field="${orders.ordNum}" readonly="readonly"></div>
+	                 </div>
+					<div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size:18px ;">产品名称:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="proName" th:field="${orders.proApply.proName}" readonly="readonly" ></div>
+	                </div>
+	                <div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size: 18px;">融资规模:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="proScale" th:field="${orders.proApply.proScale}" readonly="readonly"></div>
+	                </div>
+	                <div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size: 18px;">融资期限:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="proDateline" th:field="${orders.proApply.proDateline}"readonly="readonly"></div>
+	                </div>
+	                <div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size: 18px;">身份审核状态:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="ordSfCheckType" th:field="${orders.ordSfCheckType}"readonly="readonly"></div>
+	                </div>
+	                 <div class="row margin">
+		                <div class="col-md-5 text-right" style="font-size: 18px;">财务审核状态:</div>
+		                <div class="col-md-5"><input type="text" class="form-control" name="ordCwCheckType" th:field="${orders.ordCwCheckType}"readonly="readonly"></div>
+	                </div>
+				</div>
+				<div>
+					<div class="col-md-6">	
+						 <div class="row margin">
+			                <div class="col-md-5 text-right" style="font-size: 18px;">权益凭证编号:</div>
+			                <div class="col-md-5"><input type="text" class="form-control" name="ordQypzId" th:field="${orders.ordQypzId}" readonly="readonly"></div>
+	                	</div>
+		                <div class="row margin">
+								<div  class="col-md-5 text-right" style="font-size: 18px;">合同编号：</div>
+								<div  class="col-md-5 text-right"><input type="text" class="form-control" name="ordContractId" th:field="${orders.ordContractId}" readonly="readonly"></div>
+						</div>
+						<div class="row margin">
+							<div  class="col-md-5 text-right" style="font-size: 18px;">订单状态：</div>
+							<div  class="col-md-5 text-right"><input type="text" class="form-control" name="ordType" th:field="${orders.ordType}" readonly="readonly"></div>
+						</div>
+						<div class="row margin">
+							<div  class="col-md-5 text-right" style="font-size: 18px;">预约额度：</div>
+							<div  class="col-md-5 text-right"><input type="text" class="form-control" name="ordBookingQuota" th:field="${orders.ordBookingQuota}"readonly="readonly"></div>
+						</div>
+						<div class="row margin">
+							<div  class="col-md-5 text-right"  style="font-size: 18px;">银行卡号：</div>
+							<div  class="col-md-5 text-right"><input type="text" class="form-control" name="ordCusCard" th:field="${orders.ordCusCard.bankNum}" readonly="readonly"></div>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</body>
+</html>

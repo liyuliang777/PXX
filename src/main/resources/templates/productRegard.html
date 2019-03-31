@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="productShow::proHeader">
+</head>
+<body>
+   <div th:include="productShow::pro1"></div>
+   
+   <div id="proDetail" class="container-fluid grey">
+         <dl>
+             <dt class="title"></dt>
+             <dd class="des">{{pro.apply.proName}}</dd>
+			 <dd class="btn"><span>{{pro.apply.productType.itemName}}</span></dd>
+         </dl>
+                        
+    </div>
+    <script>
+var proDetailVue=new Vue({
+	    		el:"#proDetail",
+	    		data:{
+	    			proDetail:[]
+	    		},
+	    		created:function(id){
+	    			 $.ajax({
+	    	             url:urlVal,
+	    	             data:{"proId":id},
+	    	             dataType:'json',
+	    	             success:function(data){
+	    	            	 proDetailVue=data;
+	    	            	 }
+	    	             })
+	    			}
+    	})
+    </script>
+    <p>2
+   <iframe name="footer" src="../base/footer.html" marginwidth=0 marginheight=0 frameborder="0" width="100%" scrolling=no></iframe>
+  <div th:include="productShow::pro2"></div>
+</body>
+</html>

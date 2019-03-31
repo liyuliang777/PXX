@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <link rel="shortcut icon" href="images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/base.js"></script>
+</head>
+<body>
+<div id="app">
+<form action="" method="post">
+	<div class="container">
+		<div class="form-group col-md-6">
+			<input type="hidden" id="customerId" th:value="${session.customer.id}">
+			
+			<div class="row">
+				<label class="col-md-3 text-right">户名：</label>
+				<div class="col-md-9">
+					<input type="text" class="form-control" id="ownerName"  th:value="${session.customer.cusName}" readonly="readonly"><br/>
+				</div>
+			</div>
+			
+			<div class="row">
+				<label class="col-md-3 text-right">账户：</label>
+				<div class="col-md-9">
+					<input type="text"  class="form-control" id="bankNum">
+				</div>
+			</div>
+			<p><p>
+			<div class="row">
+				<label class="col-md-3 text-right">支行：</label>
+				<div class="col-md-9">
+					<input type="text" class="form-control" id="bankName" ><br/>
+				</div>
+			</div>
+			<div class="col-md-4 col-md-offset-3">
+				<input type="button" class="btn btn-success" value="增加" onclick="insert()">
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+</body>
+<script type="text/javascript">
+
+function insert(){
+	
+	
+	$.ajax({
+		url:"addcardll",
+		method:"post",
+		dataType:"json",
+		data:{
+			"customerId":$("#customerId").val(),
+			"bankNum":$("#bankNum").val(),
+			"ownerName":$("#ownerName").val(),
+			"bankName":$("#bankName").val()
+		},
+		
+		success:function(date){
+			if(date){
+				alert('成功');
+				location.href='getcard';
+			}else{
+				alert('失败');
+				location='toaddcard';
+			}
+		}
+		})
+			
+	
+}
+</script>
+</html>

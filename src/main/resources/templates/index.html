@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>某某信托</title>
+    <link rel="shortcut icon" href="images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/verify.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/verify.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/base.js"></script>
+   
+    <style type="text/css">
+    	.error{color:red}
+    	.success{color:green}
+    </style>
+</head>
+<body>
+    <div  class="container-fluid" th:fragment="header">
+        <div id="header" class="row head">
+        	<div class="col-md-6" style="padding-top:10px" >
+        		<iframe width="450" scrolling="no" height="18" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=1&icon=4&wind=1&num=2&site=12"></iframe>
+        	</div>
+            <div class="col-md-6 text-right" style="margin-top: 20px;">
+                <ul class="list-group list-inline head-font-color">
+                    <li>
+                        <span class="glyphicon glyphicon-phone-alt">&nbsp;联系电话：18665999266&nbsp;</span>&nbsp;
+                    </li>
+                    <!-- 用户未登录 -->
+                    <li v-if="user.id == null || user.id == ''">
+                        <span class="glyphicon-user glyphicon"></span>
+                        <a class="hover" data-toggle="modal" href='#loginDiv'>登录</a>
+                            &nbsp;|&nbsp;
+                        <a data-toggle="modal" class="hover" href='#registerDiv'>注册</a>  
+                    </li>
+                    <!-- 用户已登录 -->
+                    <li v-else class="dropdown">
+                        欢迎你，
+                        <a href="" class="hover glyphicon glyphicon-user dropdown-toggle" data-toggle="dropdown" v-text="user.cusName"></a>
+                        <div class="dropdown-menu">
+                            <ul class="list-group list-unstyled text-center">
+                                <li>
+                                    <a href="/customerIndex" class="hover glyphicon glyphicon-log-in" target="show">&nbsp;个人中心</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/removeCustomer" class="hover glyphicon glyphicon-log-out">&nbsp;退出登录</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 用户注册 -->
+	    <div class="modal fade" id="registerDiv">
+	        <div class="modal-dialog" style="width: 1000px;height: 1000px">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <div class="col-md-12">
+	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                    </div>
+	                    <div class="col-md-3" style="border-right: 1px orangered solid;height: 500px">
+	                        <img src="images/logo.jpg" width="200px" alt="">
+	                    </div>
+	                    <div class="col-md-8" style="color: black;padding-top: 50px;">
+	                        
+	                        <form action="#" method="POST" role="form">
+	                            <legend>用户注册</legend>
+	                            <div class="row">
+	                                <label for="" class="col-md-2 text-right">手机号码</label>
+	                                <div class="form-group col-md-6">
+	                                    <input v-model="cusMobilePhone" @blur="checkCusMobilePhone" type="text" class="form-control" placeholder="请输入注册手机号码">
+	                                </div>
+	                                <div class="col-md-4" :class="cusMobilePhoneClass" v-text="cusMobilePhoneInfo"></div>
+	                            </div>
+	                            <div class="row">
+	                                <label for="" class="col-md-2 text-right">密码</label>
+	                                <div class="form-group col-md-6">
+	                                    <input v-model="cusPwd" @blur="checkCusPwd" type="password" class="form-control" placeholder="请输入注册密码">
+	                                </div>
+	                                <div class="col-md-4" :class="cusPwdClass" v-text="cusPwdInfo"></div>
+	                            </div>
+	                            <div class="row">
+	                                <label for="" class="col-md-2 text-right">再次密码</label>
+	                                <div class="form-group col-md-6">
+	                                    <input v-model="cusPwd2" @blur="checkCusPwd2" type="password" class="form-control" placeholder="请再次输入注册密码">
+	                                </div>
+	                                <div class="col-md-4" :class="cusPwdClass2" v-text="cusPwdInfo2"></div>
+	                            </div>
+	                            <div class="row">
+	                                <label for="" class="col-md-2 text-right">手机验证码</label>
+	                                <div class="form-group col-md-4">
+	                                    <input v-model="phoneCode" @blur="checkPhoneCode" type="text" class="form-control" placeholder="请输入手机验证码">
+	                                </div>
+	                                <div class="col-md-2"><button type="button"class="btn btn-default"  @click="getPhoneCode">获取验证码</button></div>
+	                                <div class="col-md-4" :class="phoneCodeClass" v-text="phoneCodeInfo"></div>
+	                            </div>
+	                            <div class="row">
+	                            	<label for="" class="col-md-2 text-right">验证码</label>	
+	                                <div class="col-md-4">
+	                                	<input type="text" @blur="checkImgCode" class="form-control" v-model="imgCode" placeholder="请输入验证码">
+	                                </div>
+	                               	<div class="col-md-2">
+		                            	<button @click="createCode" type="button" class="btn btn-default" v-text="imgCode2"></button>
+		                            </div>
+	                                <!-- 提示语句 -->
+	                                <div class="col-md-4" :class="imgCodeClass" v-text="imgCodeInfo"></div>
+	                            </div>
+	                            <p></p>
+	                            <div class="row">
+	                                <div class="col-md-2"></div>
+	                                <div class="form-group col-md-4">
+	                                    <button type="button" @click="register" class="btn btn-success form-control">立即注册</button>
+	                                </div>
+	                                <div class="col-md-4 error" v-text="checkAll"></div>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	
+	    <!-- 用户登录 -->
+	    <div class="modal fade" id="loginDiv">
+	        <div class="modal-dialog" style="width: 1000px">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <div class="col-md-12">
+	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="false">&times;</button>
+	                    </div>
+	                    <div class="col-md-5" style="border-right: 1px orangered solid;height: 500px">
+	                        <img src="images/logo.jpg" alt="">
+	                    </div>
+	                    <p style="margin: 150px"></p>
+	                    <div class="col-md-6">
+	                        <form action="#" method="POST" role="form">
+	                            <legend>用户登录</legend>
+	                            <div class="col-md-8">
+	                                <div class="input-group form-group">
+	                                    <span class="input-group-addon" id="basic-addon1"><lable class="glyphicon glyphicon-phone"></lable></span>
+	                                    <input type="text" v-model="telphone" class="form-control" placeholder="手机号码" th:placeholder="#{login.telphone}" aria-describedby="basic-addon1">
+	                                </div>
+	                            </div>
+	                            <div class="col-md-4"></div>
+	                            <div class="col-md-8">
+	                                <div class="input-group form-group">
+	                                    <span class="input-group-addon" id="basic-addon1"><lable class="glyphicon glyphicon-lock"></lable></span>
+	                                    <input type="password" v-model="password" class="form-control" placeholder="密码" th:placeholder="#{login.password}" aria-describedby="basic-addon1">
+	                                </div>
+	                            </div>
+	                            <div class="col-md-4"></div>
+	                            <div class="col-md-6">
+	                                <div class="input-group form-group">
+	                                    <span class="input-group-addon"><label for="" class="glyphicon glyphicon-qrcode"></label></span>
+	                                    <input type="text" v-model="code" @blur="checkCodeInput" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="验证码">
+	                                </div>
+	                            </div>
+	                            <div class="col-md-2">
+	                            	<button @click="createCode" type="button" class="btn btn-default" v-text="checkCode"></button>
+	                            </div>
+	                            <div class="col-md-4" :class="codeClass" v-text="codeInfo"></div>
+	                            <p style="margin: 60px"></p>
+	                            <div class="form-group col-md-8">
+	                                <button type="button" class="btn btn-success" @click="login" th:value="#{login.submit}">点击登录</button>
+	                                <button type="reset" class="btn btn-warning">重新填写</button>
+	                            </div>
+	                            <div class="col-md-8" :class="checkALlClass" v-text="checkAllInfo"></div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+        <hr style="margin: 0px;padding: 0px;">
+    </div>
+
+    <div id="logo" class="row text-left fontsize fontcolor" style="padding: 0px 50px;">
+        <marquee behavior="" direction="">
+            <h1 class="glyphicon glyphicon-knight" style="margin-left: 30px;"></h1>
+            <h1>拼夕夕</h1>
+        </marquee>
+    </div>
+
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div id="mnue" class="col-md-9">
+                <ul class="list-group list-unstyled text-center">
+                    <li class="mnue text-center"><a class="hover" href="./reception/productShow.html">文化&nbsp;<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                    <li class="mnue text-center" title="查看所有产品"><a class="hover" href="/show">产品<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                    <li class="mnue text-center"><a class="hover" href="./reception/productShow.html">信息&nbsp;<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                    <li class="mnue text-center"><a class="hover" href="./reception/productShow.html">服务&nbsp;<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                    <li class="mnue text-center"><a class="hover" href="./reception/productShow.html">公司&nbsp;<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                    <li class="mnue text-center"><a class="hover" href="./reception/productShow.html">合作&nbsp;<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                </ul>
+            </div>  
+        </div>
+       <!-- 主体部分 -->
+       <div class="container-fluid">
+           <iframe src="base/img.html" width="100%" height="600px"  frameborder="0"></iframe>
+           <div class="row">
+                
+           </div>
+       </div>
+
+       <!-- 尾部分 -->
+       <iframe name="footer" src="base/footer.html" marginwidth=0 marginheight=0 frameborder="0" width="100%" scrolling=no></iframe>
+
+    </div> 
+ 
+    
+
+</body>
+<script type="text/javascript" src="js/index.js"></script>
+</html>

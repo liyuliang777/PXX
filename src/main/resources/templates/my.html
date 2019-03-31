@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户个人中心</title>
+    <link rel="shortcut icon" href="../images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/my.js"></script>
+    <style>
+        .mnue-font-size{font-size: 20px; }
+        .mnue-font-size a{color:#337AB7;}
+        .mnue-font-size a:hover{color: orange;text-decoration: none;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="col-md-2">
+            <div class="row text-center" style="background-color: #3E95FF;color: white; margin-top: 20px;margin-bottom: 20px;">
+                <h4 th:text="'晚上好，'+${session.customer.cusName}"></h4>
+                <h6 th:text="'最近登录：'+${#dates.format(session.customer.cusBeforeLoginDate, 'yyyy-MM-dd HH:mm:ss')}"></h6>
+            </div>
+            <div class="row">
+                <ul class="list-group list-unstyled">
+                    <li class="list-group-item text-center mnue-font-size"><a href="getcus?status=0" target="myShow">我的资料</a></li>
+                    <li class="list-group-item text-center mnue-font-size"><a href="/getcard" target="myShow">银行卡管理</a></li>
+                    <li class="list-group-item text-center mnue-font-size"><a href="fengxian" target="myShow">风险评估</a></li>
+                    <li class="list-group-item text-center mnue-font-size"><a href="pwd" target="myShow">密码管理</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10" style="margin-top: 20px;">
+           <iframe name="myShow" src="/getcus?status=0" frameborder="0" width="100%" height="550px" ></iframe>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="proHeader">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>产品展示列表</title>
+    <link rel="shortcut icon" href="../images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/vue.js"></script>
+   <script src="../js/myzzl.js"></script> 
+   <script type="text/javascript" src="js/base.js"></script>
+</head>
+<body>
+	<div th:fragment="pro1">
+    <div th:insert="~{index::header}"></div>
+    <script type="text/javascript" src="js/index.js"></script>
+    <div id="logo" class="row text-left fontsize fontcolor" style="padding: 0px 50px;">
+        <marquee behavior="" direction="">
+            <h1 class="glyphicon glyphicon-knight" style="margin-left: 30px;"></h1>
+            <h1>拼夕夕</h1>
+        </marquee>
+    </div>
+      
+
+    <div class="container">
+        <div class="col-md-6 text-left" style="font-size: 40px;line-height: 70px; font-weight: bolder;background-color: #3ECCF2;color: white">
+            产品列表
+        </div>
+        <div class="col-md-6 text-right" style="margin-top: 30px">
+            <a href="/"><span class="glyphicon glyphicon-home">&nbsp;</span>首页</a>
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <a href="/show">产品列表</a>
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span>当前页面</span>
+        </div>
+    </div>
+    <hr style="margin: 0px;">
+    <div clas="container-fluid whiteBlack">
+        <div class="container" style="font-size: 30px;">
+            <button class="col-md-4 showType" style="color: red">
+                <span class="glyphicon glyphicon-signal">&nbsp;</span>热销产品
+            </button>
+            <button class="col-md-3 showType" style="color: orange;border-left: 1px #F4F4F4 solid;border-right: 1px #F4F4F4 solid;">
+                    <span  class="glyphicon glyphicon-piggy-bank">&nbsp;</span>存续产品
+            </button>
+            <button class="col-md-4 showType" style="color: gray">
+                    <span class="glyphicon glyphicon-trash">&nbsp;</span>历史产品
+            </button>
+            
+        </div>
+    </div>
+</div>
+<!-- 产品查询和展示 -->
+	<div id="proQueryandShow">
+        <div class="container-fluid grey">
+            <div class="container">
+                <div class="row reservation">
+                	    <div id="productQuery">
+                    <form action="">
+                        <div class="col-md-3">
+                            <label for="" class="col-md-3">期限</label>
+                            <div class="col-md-9 form-group">
+                                <select name="" v-model="qQiXian"  class="form-control">
+                                    <option value="">请选择</option>
+                                    <option value="a">1年以内</option>
+                                    <option value="b">1~3年</option>
+                                    <option value="c">2~5年以内</option>
+                                    <option value="d">5年以上</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="" class="col-md-4">收益率</label>
+                            <div class="col-md-8 form-group">
+                                <select name="" id="" v-model="qShouYiLv" class="form-control">
+                                    <option value="">请选择</option>
+                                    <option value="a">3%~5%</option>
+                                    <option value="b">5%~7%</option>
+                                    <option value="c">7%~9%</option>
+                                    <option value="d">9%以上</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="" class="col-md-3">类型</label>
+                            <div class="col-md-9 form-group">
+                                <select name="" id="" v-model="qType" class="form-control">
+                                    <option value="0">请选择</option>
+                                    <option value="71"  >政信类</option>  
+                                    <option value="72" >房地产类</option>
+                                    <option value="70" >矿产能源类</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="col-md-9 form-group">
+                                <input type="text" v-model="qProName"  class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" @click="seach()" class="btn btn-info "><span class="glyphicon glyphicon-search" aria-hidden="false"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                <div id="productDiv">
+                <div class="row" v-for="(pro,i) in products":key="i" >
+                
+                    <div class="row jiange"></div>
+                    <div class="row pro">
+                        <div class="col-md-3 blue size" @click="reservation(pro.proId)">
+                            <dl>
+                                <dt class="title">拼夕夕信托</dt>
+                                <dd class="des">{{pro.apply.proName}}</dd>
+                                <dd class="btn"><span>{{pro.apply.productType.itemName}}</span></dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6 white size text-center">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <td>发行日期</td>
+                                        <td>产品期限</td>
+                                        <td>分配方式</td>
+                                        <td>投资起点</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td >2018-12-12</td>
+                                        <td v-text="pro.apply.proDateline/12+'年'"></td>
+                                        <td v-text="pro.proPaymentMeasure"></td>
+                                        <td v-text="pro.proStartMoney+'万'"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-3 white size text-center">
+                            <dl>
+                                <dt class="title" v-text="pro.apply.proReceipts*100+'%'"></dt>
+                                <dd>预期收益</dd>
+                                <dd><button type="button" class="btn btn-info reservation" @click="reservation(pro.proId)">产品预约</button></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row jiange"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page" class="container text-center jiange">
+        <div class="btn-group">
+            <button type="button" class="btn btn-group btn-default" :disabled="upPage" @click="queryByPage(1)">首页</button>
+            <button type="button" class="btn btn-group btn-default" :disabled="upPage" @click="queryByPage(currentPage-1)">上一页</button>
+
+            <button v-for="(page, i) in pages" :key="i" type="button" :class="currentPage==page?'active':''" @click="queryByPage(page)" class="btn btn-group btn-default" v-text="page"></button>
+
+            <button type="button" class="btn btn-group btn-default" :disabled="downPage" @click="queryByPage(currentPage+1)">下一页</button>
+            <button type="button" class="btn btn-group btn-default" :disabled="downPage" @click="queryByPage(totlePage)">末页</button>
+        </div>
+    </div>
+  </div>
+    <script>
+		var queryVue=new Vue({
+			el:'#productQuery',
+			data:{
+				qQiXian:'',
+				qShouYiLv:'',
+				qType:0,
+				qProName:''
+			},
+			methods:{
+				seach:function(){
+					  var data = {
+							  	"page":1,
+		                        "query.qQiXian":queryVue.qQiXian,
+		                        "query.qShouYiLv":queryVue.qShouYiLv,
+		                        "query.qType":queryVue.qType,
+		                        "query.qProName":queryVue.qProName
+		                    }
+					getProsByAjax('/pro',data,this);
+				}
+			}
+		})
+		
+        var pageVue = new Vue({
+            el:'#page',
+            data:{
+                pages:[],
+                currentPage:1,
+                totlePage:6,
+                pageClass:'',
+                upPage:false,
+                downPage:false,
+            },
+            methods: {
+                queryByPage:function(p){
+                    var data = {
+                        "page":p,
+                        "query.qQiXian":queryVue.qQiXian,
+                        "query.qShouYiLv":queryVue.qShouYiLv,
+                        "query.qType":queryVue.qType,
+                        "query.qProName":queryVue.qProName
+                    };
+                    getProsByAjax('/pro',data,this);
+
+                }
+            },
+        }) 
+
+
+        var productVue = new Vue({
+            el:'#productDiv',
+            data:{
+                products:[]
+            },
+            created:function() {
+            	var url="/pro";
+                var data = {"page":1,
+                			"query.qQiXian":queryVue.qQiXian,
+                			"query.qShouYiLv":queryVue.qShouYiLv,
+                			"query.qType":queryVue.qType,
+                			"query.qProName":queryVue.qProName};
+                getProsByAjax(url,data,this);
+            },
+            methods: {
+                reservation:function(id){
+                	getProDetailAjax(id);
+                }
+            },
+        })
+    </script>
+     <!-- 尾部分 -->
+     <iframe name="footer" src="../base/footer.html" marginwidth=0 marginheight=0 frameborder="0" width="100%" scrolling=no></iframe>
+
+    
+            
+ 
+            
+            <!-- 产品预约 -->
+          <div class="modal fade" id="yuYueModal">
+            <div class="modal-dialog" style="width: 1000px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="col-md-12">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="col-md-5" style="border-right: 1px orangered solid;height: 500px">
+                            <img src="../images/logo.jpg" alt="">
+                        </div>
+                        <p style="margin: 150px"></p>
+                        <div class="col-md-6">
+                            <!-- <form action="#" method="POST" role="form" >  -->
+                                <legend>产品额度预约</legend>
+                                <!--姓名输入框  -->
+                                 <div class="col-md-8"><!-- 输入框样式 -->
+                                    <div class="input-group form-group">
+                                        <span class="input-group-addon" id="basic-addon1"><lable class="glyphicon glyphicon-lock"></lable></span>
+                                        <input type="text" v-model="name" class="form-control" placeholder="姓名" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <!-- 电话输入框 -->
+                                <div class="col-md-4"></div><!--空行样式  -->
+                                <div class="col-md-8"><!-- 输入框样式 -->
+                                    <div class="input-group form-group">
+                                        <span class="input-group-addon" id="basic-addon1"><lable class="glyphicon glyphicon-phone"></lable></span>
+                                        <input type="text" v-model="telphone" class="form-control" placeholder="手机号码" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <!--选择银行卡  -->
+                                 <div class="col-md-4"></div><!--空行样式  -->
+                                <div class="col-md-8"><!-- 输入框样式 -->
+                                    <div class="input-group form-group" >
+                                        <select class="form-control" v-model="card">
+                                        <option value=0>请选择你的银行卡号</option>
+                                       		<option th:each="card:${session.customer.bankAccounts}" th:value="${card.id}" th:text="${card.bankNum}"></option>
+										</select>
+                                    </div>
+                                </div>
+                                <!--预约金额输入框  -->
+                                 <div class="col-md-4"></div><!--空行样式  -->
+                                <div class="col-md-8"><!-- 输入框样式 -->
+                                    <div class="input-group form-group">
+                                        <span class="input-group-addon" id="basic-addon1"><lable class="glyphicon glyphicon-phone"></lable></span>
+                                        <input type="text" v-model="money" class="form-control" placeholder="预约金额(万)" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <!-- 验证码 -->
+                                <div class="col-md-4"></div><!--空行样式  -->
+                                <div class="col-md-8">
+                                    <div class="input-group form-group">
+                                        <span class="input-group-addon"><label for="" class="glyphicon glyphicon-qrcode"></label></span>
+                                        <input type="text" v-model="code" class="form-control" id="code" aria-label="Amount (to the nearest dollar)" placeholder="验证码">
+                                        <div class="input-group-addon"><input type="button" :value="codes" id="codes" size="4"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4"></div>
+                                <p style="margin: 60px"></p>
+                                <div class="form-group col-md-8">
+                                    <button type="button" class="btn btn-success"  @click="yuYue()">点击预约</button>
+                                    <button type="button" class="btn btn-warning" data-dismiss="modal">取消预约</button>
+                                </div>
+                           <!--  </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    <script>
+    var yuYueVue = new Vue({
+        el:'#yuYueModal',
+        data:{
+            telphone:null,
+            card:0,
+            name:null,
+            money:null,
+            code:null,
+            proId:'',
+            codes:'',
+        },
+        methods: {
+            yuYue:function(){
+            	alert(":");
+            	
+            	var yz=$("#codes").val();
+             	var par=/^(13[0-9]|14[5|7]|15[0-9]|17[0-9]|18[0-9])\d{8}$/;
+            	var qian=/^[0-9]*$/; 
+            	if(this.name==null){
+            		alert("姓名不能为空");
+            		return;
+            	}else if(this.telphone==null){
+            		alert("电话号码不能为空");
+            		return;
+            	} else if(par.test(this.telphone)==false){
+            		alert("号码格式不对");
+            		return;
+            	} else if(this.money==null){
+            		alert("money不能为空");
+            		return;
+            	} else if(qian.test(this.money)==false){
+            		alert("只能是数字");
+            		return;
+            	} else if(this.code.toUpperCase()!=yz.toUpperCase()){
+            		alert("验证码错误");
+            		return;
+            	}else{
+                 $.ajax({
+                     url:'/addOrderTable',
+                     data:{
+                    	 'ordCusCard.id':this.card,
+                         'proApply.proId':this.proId,
+                         'ordBookingQuota':this.money,
+                        /*   'code':this.code, */
+                         /*  'userId':userVue.user.userId, */
+                   },
+                    // dataType:'json',
+                     success:function(data){
+                         if(data){
+                        	 location.href="/show";
+                         }else{
+                        	 alert(预约失败);
+                         } 
+                     }
+                 });
+            	}
+            }
+        },
+    })
+        
+        
+        </script>
+
+</body>
+</html>
+<script type="text/javascript">
+//设置一个全局的变量，便于保存验证码
+
+/* 点击切换验证码 */
+
+$(function(){
+	$("#codes").click(function(){
+		createCode();
+		
+	})
+})
+Window.onload=createCode();
+	var code;
+	function createCode(){
+		
+	    //首先默认code为空字符串
+	    code = '';
+	    //设置长度，这里看需求，我这里设置了4
+	    var codeLength = 4;
+	   
+	    //设置随机字符
+	    var random = new Array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R', 'S','T','U','V','W','X','Y','Z');
+	    //循环codeLength 我设置的4就是循环4次
+	    for(var i = 0; i < codeLength; i++){
+	        //设置随机数范围,这设置为0 ~ 36
+	         var index = Math.floor(Math.random()*36);
+	         //字符串拼接 将每次随机的字符 进行拼接
+	         code += random[index]; 
+	    }
+	    //将拼接好的字符串赋值给展示的Value
+	   
+	    $("#codes").val(code);
+	   
+	}
+
+
+</script>

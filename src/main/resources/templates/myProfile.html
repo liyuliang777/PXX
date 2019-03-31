@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的资料</title>
+    <link rel="shortcut icon" href="../images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/my.js"></script>
+</head>
+<body>
+    <div class="container-fluid" style="margin-left: 20px;">
+        
+        <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">个人信息</a>
+                </li>
+<!--                 <li role="presentation"> -->
+<!--                     <a href="#tab" aria-controls="tab" role="tab" data-toggle="tab">联系信息</a> -->
+<!--                 </li> -->
+            </ul>
+        
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home" style="font-size: 20px;line-height: 50px;">
+                    <div class="col-md-2 text-right">姓名：</div><div class="col-md-10 text-left" th:text="${cus.cusName}"></div>
+                    <div class="col-md-2 text-right">手机号：</div><div class="col-md-10 text-left" th:text="${cus.cusMobilePhone}"></div>
+                    <div class="col-md-2 text-right">证件号：</div><div class="col-md-10 text-left" th:text="${cus.cusCardId}"></div>
+                    <div class="col-md-2 text-right">性别：</div><div class="col-md-10 text-left" th:text="${cus.cusSex}"></div>
+                    <div class="col-md-2 text-right">生日：</div><div class="col-md-10 text-left" th:text="${#dates.format(cus.cusBirth, 'yyyy-MM-dd')}"></div>
+                    <div class="col-md-2 text-right">户籍：</div><div class="col-md-10 text-left" th:text="${cus.cusHAddr}"></div>
+                    <div class="col-md-2 text-right">工作单位：</div><div class="col-md-10 text-left" th:text="${cus.cusWorkspace}"></div>
+                    <div class="col-md-2 text-right">学历：</div><div class="col-md-10 text-left" th:text="${cus.cusEducation}"></div>
+                   
+<!--                 </div> -->
+<!--                 <div role="tabpanel" class="tab-pane" id="tab" style="font-size: 20px;line-height: 50px;"> -->
+                    <div class="col-md-2 text-right">详细地址：</div><div class="col-md-10 text-left" th:text="${cus.cusAddr}"></div>
+                    <div class="col-md-2 text-right">邮箱：</div><div class="col-md-10 text-left" th:text="${cus.cusEmail}"></div>
+                    <div class="col-md-2 text-right">固定电话：</div><div class="col-md-10 text-left" th:text="${cus.cusPhone}"></div>
+                     
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    <a href="getcus?status=1"><input type="button" value="编辑资料"></a> 
+    
+</body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace:必须是对应接口的全路径
+	
+ -->
+<mapper namespace="org.hut.dao.ProductMapper">
+<resultMap type="proDetail" id="pc">
+<id property="proId" column="pro_id"/>
+	<result  column="TRUST_MEASURE" property="proTrustMeasure"/>
+	<result  column="RENT_SOURCE" property="proRentSource"/>
+	<result  column="RISK_MEASURE" property="proRiskMeasure"/>
+	<result  column="Highlights" property="proAdvt"/>
+	<result  column="RAISE_STATE" property="proRaiseState"/>
+	<result  column="PRO_DIRECT" property="proDirect"/>
+	<result  column="PAYMENT_MEASURE" property="proPaymentMeasure"/>
+	<result  column="START_MONEY" property="proStartMoney"/>
+	<result  column="RIST_LEVEL" property="proRistLevel"/>
+	<result  column="REGION" property="proRegion"/>
+	<result  column="PRO_REMAIN" property="proRemain"/>
+	<!-- <result  column="PRO_STARTDATE" property="proStartDate"/> -->
+	<association property="apply" column="PRO_DETAILID" javaType="apply" select="org.hut.dao.ApplyMapper.queryApplayById"></association>
+</resultMap>
+	
+	<select id="selectProductByFenYe" parameterType="fenYe" statementType="CALLABLE">
+	<![CDATA[
+		{
+			call proFenYe(
+				#{startTiaoShu,mode=IN,jdbcType=INTEGER},
+				#{endTiaoShu,mode=IN,jdbcType=INTEGER},
+				#{query.qQiXian,mode=IN,jdbcType=VARCHAR},
+				#{query.qShouYiLv,mode=IN,jdbcType=VARCHAR},
+				#{query.qProName,mode=IN,jdbcType=VARCHAR},
+				#{query.qType,mode=IN,jdbcType=INTEGER},
+				#{zongJiLuShu,mode=OUT,jdbcType=INTEGER},
+				#{pros,mode=OUT,jdbcType=CURSOR,javaType=ResultSet,resultMap=pc}
+			)
+		}
+ 	]]>
+		<!-- SELECT * FROM (SELECT ROWNUM r,b.* FROM (SELECT * FROM pro_detail pd
+		inner join pro_apply pa on pd.PRO_DETAILID=pa.pro_detail_id
+		<where>
+			<if test="query!=null">
+				<if test="query.qQiXian!=null and !query.qQiXian.equals('')">
+					<if test='query.qQiXian=="a"'>and pa.PRO_DATELINE<![CDATA[<=]]>12</if>
+					<if test='query.qQiXian=="b"'>and pa.PRO_DATELINE<![CDATA[<=]]>36 and pa.PRO_DATELINE>12</if>
+					<if test='query.qQiXian=="c"'>and pa.PRO_DATELINE<![CDATA[<=]]>60 and pa.PRO_DATELINE>36</if>
+					<if test='query.qQiXian=="d"'>and pa.PRO_DATELINE>60</if>
+				</if>
+				<if test="query.qShouYilv!=null and !query.qShouYilv.equals('')">
+					<if test='query.qShouYilv=="a"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.05 and pa.PRO_RECEIPTS>=0.03</if>
+					<if test='query.qShouYilv=="b"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.07 and pa.PRO_RECEIPTS>0.05</if>
+					<if test='query.qShouYilv=="c"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.09 and pa.PRO_RECEIPTS>0.07</if>
+					<if test='query.qShouYilv=="d"'>and pa.PRO_RECEIPTS>0.09</if>
+				</if>
+				<if test="query.qType!=null and query.qType!=0">
+					and pa.PRO_TYPE_ID=#{query.qType}
+				</if>
+				<if test="query.qProName!=null and !query.qProName.equals('')">
+					and pa.PRO_NAME like concat('%',concat(#{query.qProName},'%'))
+				</if>
+			</if>
+		
+		</where>
+		
+	)b)WHERE r<![CDATA[<=]]>#{endTiaoShu} AND r>#{startTiaoShu} -->
+	</select>
+	
+	<select id="queryTotalTiaoShu" parameterType="query" resultType="int">
+		<!-- select count(1) from pro_detail pd
+		inner join pro_apply pa on pd.PRO_DETAILID=pa.pro_detail_id
+		<where>
+				<if test="qQiXian!=null and !qQiXian.equals('')">
+					<if test='qQiXian=="a"'>and pa.PRO_DATELINE<![CDATA[<=]]>12</if>
+					<if test='qQiXian=="b"'>and pa.PRO_DATELINE<![CDATA[<=]]>36 and pa.PRO_DATELINE>12</if>
+					<if test='qQiXian=="c"'>and pa.PRO_DATELINE<![CDATA[<=]]>60 and pa.PRO_DATELINE>36</if>
+					<if test='qQiXian=="d"'>and pa.PRO_DATELINE>60</if>
+				</if>
+				<if test="qShouYilv!=null and !qShouYilv.equals('')">
+					<if test='qShouYilv=="a"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.05 and pa.PRO_RECEIPTS>=0.03</if>
+					<if test='qShouYilv=="b"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.07 and pa.PRO_RECEIPTS>0.05</if>
+					<if test='qShouYilv=="c"'>and pa.PRO_RECEIPTS<![CDATA[<=]]>0.09 and pa.PRO_RECEIPTS>0.07</if>
+					<if test='qShouYilv=="d"'>and pa.PRO_RECEIPTS>0.09</if>
+				</if>
+				<if test="qType!=null and qType!=0">
+					and pa.PRO_TYPE_ID=#{qType}
+				</if>
+				<if test="qProName!=null and !qProName.equals('')">
+					and pa.PRO_NAME like concat('%',concat(#{qProName},'%'))
+				</if>
+		
+		</where> -->
+	</select>
+
+
+
+
+<select id="selectProductById"  parameterType="int"  resultMap="pc">
+	select * from pro_detail where pro_id=#{id}
+</select>
+
+
+</mapper>

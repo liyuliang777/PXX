@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <link rel="shortcut icon" href="images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/base.js"></script>
+<style type="text/css">
+
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+<form action="" method="post"   >
+<table class="table table-striped table-bordered table-hover table-responsive">
+<tr>
+	<th><input type="checkbox" id="allbox">全选</th>
+	<th>开户行</th>
+	<th>户名</th>
+	<th>银行卡账号</th>
+<!-- 	<th>操作</th> -->
+</tr>
+<tr th:each="card:${cardList}">
+	<td><input type="checkbox" name="ids" th:value="${card.id}"></td>
+	<td th:text="${card.bankName}"></td>
+	<td th:text="${card.ownerName}"></td>
+	<td th:text="${card.bankNum}"></td>
+<!-- 	<td> -->
+
+<!-- 		<input type="button" th:onclick="'javascript:del('+${card.id}+')' " value="删除"> -->
+
+<!-- 		<button th:value="${card.id}" th:onclick="update(this.value)">修改</button> -->
+	
+<!-- 	</td> -->
+</tr>
+
+</table>
+<!-- <input type="submit" value="删除" > -->
+ <button th:onclick="del()" class="btn btn-danger btn-sm">删除</button> 
+ 
+
+<a href="toaddcard" ><input type="button" class="btn btn-primary btn-sm" value="增加银行卡"></a>
+</form>
+
+</body>
+<script type="text/javascript">
+// 全选
+$(function(){
+	$("#allbox").click(function(){
+		$("input[name='ids']").prop("checked",this.checked);
+	})
+	$("input[name='ids']").each(function(){
+		$(this).click(function(){
+			if($("input[name='ids']").length==$("input[name='ids']:checked").length){
+				$("#allbox").prop("checked",true);
+			}else{
+				$("#allbox").prop("checked",false);
+			}
+		})
+	})
+	
+})
+</script>
+<script type="text/javascript">
+function del(){
+	
+	var array=[];
+	$("input[name=ids]:checked").each(function(){
+		array.push($(this).val());
+	});
+	alert(array);
+	if(array.length<=0){
+		alert("请选择要删除的数据");
+	}else{
+		if(confirm("你确定要删除"+array)){
+			if(getDataByAjax('/delcard',{'ids':array})){
+				alert('删除成功')
+				location.href='getcard';
+			}else{
+				alert('删除失败');
+				location.href='getcard';
+			}
+		}
+	}
+	
+
+}
+
+
+</script>
+</html>
